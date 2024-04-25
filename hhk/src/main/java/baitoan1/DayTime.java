@@ -1,0 +1,58 @@
+package baitoan1;
+
+public class DayTime {
+	private int hour;
+	private int minute;
+	
+	public DayTime(int hour, int minute) {
+		setHour(hour);
+		setMinute(minute);
+	}
+	
+	public DayTime(int minutes) {
+		minutes = minutes % (24*60);
+		minutes = (minutes < 0) ? 24*60 + minutes : minutes;
+		setHour(minutes/60);
+		setMinute(minutes%60);
+	}
+	
+	public int toMinute() {
+		return this.hour*60 + this.minute;
+	}
+	
+	public int getHour() {
+		return hour;
+	}
+	public void setHour(int hour) {
+		hour = hour % 24;
+		hour = (hour < 0) ? 24 + hour : hour;
+		this.hour = hour;
+	}
+	public int getMinute() {
+		return minute;
+	}
+	public void setMinute(int minute) {
+		minute = minute % 60;
+		minute = (minute < 0) ? 60 + minute : minute;
+		this.minute = minute;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%02d:%02d", this.hour, this.minute);
+	}
+	
+	public DayTime add(DayTime time) {
+		int minutes = toMinute() + time.toMinute();
+		return new DayTime(minutes);
+	}
+	
+	public DayTime sub(DayTime time) {
+		int minutes = toMinute() - time.toMinute();
+		return new DayTime(minutes);
+	}
+	
+	public static void main(String[] args) {
+		System.out.println((new DayTime(4, 0)).sub(new DayTime(7, 45)));
+	}
+}

@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>csttnt</groupId>
+  <artifactId>hhk</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+	<dependency>
+	    <groupId>org.kordamp.ikonli</groupId>
+	    <artifactId>ikonli-swing</artifactId>
+	    <version>12.3.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.kordamp.ikonli</groupId>
+        <artifactId>ikonli-materialdesign-pack</artifactId>
+        <version>12.3.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.kordamp.ikonli</groupId>
+        <artifactId>ikonli-materialdesign2-pack</artifactId>
+        <version>12.3.1</version>
+    </dependency>
+  </dependencies>
+</project>

@@ -326,10 +326,6 @@ public class AStarApplication extends JFrame {
 				JOptionPane.showMessageDialog(null, "MUST HAVE START POINT AND GOAL POINT", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			if (AStar.matrix != null) {
-				AStar.refresh();
-				showAttempt();
-			}
 			AStar.setStart(Config.startCell.x, Config.startCell.y);
 			AStar.setEnd(Config.endCell.x, Config.endCell.y);
 					

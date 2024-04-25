@@ -49,7 +49,7 @@ public class Point {
 		}
 	}
 	
-	public int fx = 9999;
+	public int fx = 0;
 	public int gx = 0;
 	
 	public int getFx() {

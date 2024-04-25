@@ -25,7 +25,8 @@ public class AStarAlgorithm {
 	public int visitedCnt = 0;
 	public int pathLength = 0;
 	
-	private ArrayList<Point> lst = new ArrayList<>();
+	private ArrayList<Point> open = new ArrayList<>();
+	private ArrayList<Point> close = new ArrayList<>();
 
 	
 	public Point[][] generateMatrix() {
@@ -53,32 +54,57 @@ public class AStarAlgorithm {
 	}
 	
 	public Point[][] matrix;
+	
+	private Point getMin() {
+		Point min = open.get(0);
+		for (Point p : open) {
+			if (min.fx > p.fx) {
+				min = p;
+			} else if (min.fx == p.fx && (min.fx - min.gx) > (p.fx - p.gx)) {
+				min = p;
+			}
+		}
+		return min;
+	}
 		
 	public void prepareAlgorithm() {
 		matrix = generateMatrix();
-		current = start;
-		current.visited = true;
-		lst.add(current);
+		start.visited = true;
+		open.add(start);
 	}
 	
 	public boolean nextState() {
-		if (lst.isEmpty() || end.visited) {
+		if (open.isEmpty()) {
 			return false;
 		}
-		lst.remove(current);
-		ArrayList<Point> adjacencyPointList = getNextMove();
-		for (Point point : adjacencyPointList) {
-			lst.add(point);
-		}
-		Point nextPoint = adjacencyPointList.stream().min(Comparator.comparingInt(Point::getFx)).orElse(null);
-		if (nextPoint != null) {
-			if (nextPoint.fx <= current.fx) {				
-				current = nextPoint;
-			} else {
-				current = lst.stream().min(Comparator.comparingInt(Point::getFx)).orElse(null);
-			}
+		
+		current = getMin();
+		current.visited = true;
+		
+		if (current == end) {
+			end.visited = true;
+			return false;
 		} else {
-			current = lst.stream().min(Comparator.comparingInt(Point::getFx)).orElse(null);
+			open.remove(current);
+			close.add(current);
+		}
+		
+		for (Point next : getNextMove()) {
+			if (!close.contains(next)) {
+				int Gx = current.gx + 1;
+				int Fx = Gx + hx(next);
+				boolean isInOpen = open.contains(next);
+				if (!isInOpen) {
+					next.gx = Gx;
+					next.fx = Fx;
+					next.parrent = current;
+					open.add(next);
+				} else if (isInOpen && Gx < next.gx) {
+					next.gx = Gx;
+					next.fx = Fx;
+					next.parrent = current;
+				}
+			}
 		}
 		return true;
 	}
@@ -88,12 +114,7 @@ public class AStarAlgorithm {
 		for (int[] move : MOVES) {
 			try {
 				Point nextPoint = matrix[current.getX() + move[0]][current.getY() + move[1]];
-				if (!nextPoint.wall && !nextPoint.visited) {
-					nextPoint.visited = true;
-					visitedCnt++;
-					nextPoint.gx = current.gx + 1;
-					nextPoint.fx = nextPoint.gx + hx(nextPoint);					
-					nextPoint.parrent = current;
+				if (!nextPoint.wall) {					
 					points.add(nextPoint);
 				}
 			} catch (Exception e) {}
@@ -116,16 +137,16 @@ public class AStarAlgorithm {
 		return true;
 	}
 	
-	public void refresh() {
-		for (Point[] row : matrix) {
-			for (Point point : row) {
-				point.visited = false;
-				point.fx = 9999;
-				point.gx = 0;
-				point.parrent = null;
-			}
-		}
-	}
+//	public void refresh() {
+//		for (Point[] row : matrix) {
+//			for (Point point : row) {
+//				point.visited = false;
+//				point.fx = 0;
+//				point.gx = 0;
+//				point.parrent = null;
+//			}
+//		}
+//	}
 	
 	public void printMatrix() {
 		for (Point[] row : matrix) {
@@ -152,12 +173,9 @@ public class AStarAlgorithm {
 	
 	public void show() {
 		Scanner sc = new Scanner(System.in);
-		start = new Point(3, 0);
-		end = new Point(7, 11);
+		start = new Point(0, 0);
+		end = new Point(11, 11);
 		prepareAlgorithm();
-		for (int i = 2; i <= 7; i++) {
-			setWall(i, 4);
-		}
 		while (nextState()) {
 			printMatrix();
 			sc.nextLine();

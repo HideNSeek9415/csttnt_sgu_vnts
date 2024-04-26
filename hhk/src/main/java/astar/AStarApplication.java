@@ -8,6 +8,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -199,7 +202,7 @@ public class AStarApplication extends JFrame {
 		btnUpdateMatrix.setFocusPainted(false);
 		btnUpdateMatrix.setForeground(new Color(255, 255, 255));
 		btnUpdateMatrix.setBorder(null);
-		btnUpdateMatrix.setBackground(new Color(255, 128, 0));
+		btnUpdateMatrix.setBackground(new Color(0, 64, 0));
 		btnUpdateMatrix.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnUpdateMatrix.setPreferredSize(new Dimension(20, 20));
 		btnUpdateMatrix.setBounds(201, 51, 69, 28);
@@ -505,4 +508,5 @@ public class AStarApplication extends JFrame {
 			}
 		}
 	}
+	
 }

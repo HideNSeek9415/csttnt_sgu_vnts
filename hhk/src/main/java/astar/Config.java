@@ -13,5 +13,7 @@ public class Config {
 	public static Cell endCell = null;
 	
 	public static int matrixSize = 12;
+	
+	public static boolean isMousePressed = false;
 
 }

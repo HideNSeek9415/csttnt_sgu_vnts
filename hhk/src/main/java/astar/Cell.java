@@ -86,6 +86,23 @@ public class Cell extends JPanel {
 		    		clear();
 		    		break;
 		    	}
+		    	Config.isMousePressed = true;
+		    }
+		    
+		    public void mouseReleased(MouseEvent e) {
+		    	Config.isMousePressed = false;
+		    }
+
+		    
+		    public void mouseEntered(MouseEvent e) {
+		    	if (Config.isMousePressed) {
+		    		if (Config.selectmode == Config.WALL) {
+		    			makeWall();
+		    			reload();
+		    		} else if (Config.selectmode == Config.CLEAR) {
+			    		clear();
+		    		}
+		    	}
 		    }
 
 		});

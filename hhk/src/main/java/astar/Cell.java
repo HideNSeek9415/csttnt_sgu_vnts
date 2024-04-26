@@ -50,26 +50,32 @@ public class Cell extends JPanel {
 		lblNewLabel.setBackground(new Color(242, 242, 242));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblNewLabel, BorderLayout.CENTER);
-		icon.setIconSize(25);
+		icon.setIconSize(280/Config.matrixSize);
 		clear();
 
 		lblNewLabel.addMouseListener(new MouseAdapter() {
-		    public void mouseClicked(MouseEvent e) {
+		    public void mousePressed(MouseEvent e) {
 		    	switch (Config.selectmode) {
 		    	case Config.START:
 		    		makeStart();
-		    		if (Config.startCell != null) {
+		    		if (Config.endCell == self) {
+		    			Config.endCell = Config.startCell;
+		    			Config.endCell.makeGoal();
+		    		} else if (Config.startCell != null) {
 		    			Config.startCell.clear();
+		    			Config.startCell = null;
 		    		}
-		    		reload();
 		    		Config.startCell = self;
 		    		break;
 		    	case Config.END:
 		    		makeGoal();
-		    		if (Config.endCell != null) {
+		    		if (Config.startCell == self) {
+		    			Config.startCell = Config.endCell;
+		    			Config.startCell.makeStart();
+		    		} else if (Config.endCell != null) {
 		    			Config.endCell.clear();
+		    			Config.endCell = null;
 		    		}
-		    		reload();
 		    		Config.endCell = self;
 		    		break;
 		    	case Config.WALL:
@@ -81,6 +87,7 @@ public class Cell extends JPanel {
 		    		break;
 		    	}
 		    }
+
 		});
 	}
 	
@@ -95,7 +102,8 @@ public class Cell extends JPanel {
 	
 	public void makeStart() {
 		lblNewLabel.setIcon(null);
-		lblNewLabel.setText("START");
+		lblNewLabel.setText("S");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 180/Config.matrixSize));
 		setBackground(Color.decode("#e0e0e0"));
 		isWall = false;
 	}

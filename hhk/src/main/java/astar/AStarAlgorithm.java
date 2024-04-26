@@ -19,7 +19,7 @@ public class AStarAlgorithm {
 	public int state = 0;
 		
 	public Point start = new Point(0, 0);
-	public Point end = new Point(11, 11);
+	public Point end = new Point(Config.matrixSize - 1, Config.matrixSize - 1);
 	public Point current;
 	
 	public int visitedCnt = 0;
@@ -30,9 +30,9 @@ public class AStarAlgorithm {
 
 	
 	public Point[][] generateMatrix() {
-		Point[][] matrix = new Point[12][12];
-		for (int i = 0; i < 12; i++) {
-			for (int j = 0; j < 12; j++) {
+		Point[][] matrix = new Point[Config.matrixSize][Config.matrixSize];
+		for (int i = 0; i < Config.matrixSize; i++) {
+			for (int j = 0; j < Config.matrixSize; j++) {
 				matrix[i][j] = new Point(i, j);
 			}
 		}
@@ -69,7 +69,6 @@ public class AStarAlgorithm {
 		
 	public void prepareAlgorithm() {
 		matrix = generateMatrix();
-		start.visited = true;
 		open.add(start);
 	}
 	
@@ -80,6 +79,7 @@ public class AStarAlgorithm {
 		
 		current = getMin();
 		current.visited = true;
+		visitedCnt++;
 		
 		if (current == end) {
 			end.visited = true;
@@ -174,7 +174,7 @@ public class AStarAlgorithm {
 	public void show() {
 		Scanner sc = new Scanner(System.in);
 		start = new Point(0, 0);
-		end = new Point(11, 11);
+		end = new Point(Config.matrixSize - 1, Config.matrixSize - 1);
 		prepareAlgorithm();
 		while (nextState()) {
 			printMatrix();

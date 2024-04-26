@@ -11,5 +11,7 @@ public class Config {
 	public static int selectmode = DEFAULT;
 	public static Cell startCell = null;
 	public static Cell endCell = null;
+	
+	public static int matrixSize = 12;
 
 }

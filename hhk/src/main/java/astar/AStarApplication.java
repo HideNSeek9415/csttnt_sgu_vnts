@@ -174,7 +174,7 @@ public class AStarApplication extends JFrame {
 		lblPathLength.setFont(new Font("SansSerif", Font.BOLD, 16));
 		panel_8.add(lblPathLength);
 		
-		lblPathFound = new JLabel("FINDING");
+		lblPathFound = new JLabel("");
 		lblPathFound.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPathFound.setForeground(Color.WHITE);
 		lblPathFound.setFont(new Font("SansSerif", Font.BOLD, 16));
@@ -450,7 +450,7 @@ public class AStarApplication extends JFrame {
 		grp.setSelected(btnDefault.getModel(), true);
 		lblVisitedCnt.setText("0");
 		lblLength.setText("0");
-		lblPathFound.setText("FINDING");
+		lblPathFound.setText("");
 	}
 	
 	private void drawPath() {

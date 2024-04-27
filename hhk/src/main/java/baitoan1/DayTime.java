@@ -52,7 +52,14 @@ public class DayTime {
 		return new DayTime(minutes);
 	}
 	
-	public static void main(String[] args) {
-		System.out.println((new DayTime(4, 0)).sub(new DayTime(7, 45)));
+	public int compareTo(DayTime other) {
+	    int thisMinute = this.toMinute();
+	    int otherMinute = other.toMinute();
+	    return Integer.compare(thisMinute, otherMinute);
 	}
+
+	
+//	public static void main(String[] args) {
+//		System.out.println((new DayTime(4, 0)).sub(new DayTime(7, 45)));
+//	}
 }

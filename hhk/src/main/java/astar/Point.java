@@ -23,7 +23,7 @@ public class Point {
 		return x;
 	}
 	private void setX(int x) throws Exception {
-		if (x > 11 || x < 0) {			
+		if (x > Config.matrixSize - 1 || x < 0) {			
 			this.x = x;
 		} else {
 			throw new Exception("x value invalid");
@@ -33,7 +33,7 @@ public class Point {
 		return y;
 	}
 	private void setY(int y) throws Exception {
-		if (y > 11 || y < 0) {			
+		if (y > Config.matrixSize - 1 || y < 0) {			
 			this.y = y;
 		} else {
 			throw new Exception("y value invalid");

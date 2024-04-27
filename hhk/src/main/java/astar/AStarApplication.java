@@ -8,6 +8,9 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -17,6 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.SoftBevelBorder;
+import javax.swing.plaf.SpinnerUI;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import java.awt.Font;
@@ -46,7 +51,7 @@ public class AStarApplication extends JFrame {
 	private JToggleButton btnStart;
 	private JToggleButton btnEnd;
 	private JToggleButton btnWall;
-	private JToggleButton btnClear;
+	private JToggleButton btnDelete;
 	private JLabel lblInfo;
 	
 	private ButtonGroup grp = new ButtonGroup();
@@ -64,18 +69,25 @@ public class AStarApplication extends JFrame {
 	private JLabel lblVisitedCnt;
 	private JLabel lblLength;
 	private JLabel lblPathFound;
+	private JButton btnClearpath;
+	private JPanel panel_9;
+	private JLabel lblSize;
+	private JSpinner spinner;
+	private JButton btnUpdateMatrix;
+	private JLabel lblCngC_1;
+	private JLabel lblSizeBetween;
 
 	/**
 	 * Launch the application.
 	 */
 	
 	public Cell getCell(int x, int y) {
-		return cells.get(y + x*12);
+		return cells.get(y + x*Config.matrixSize);
 	}
 	public int[] getCellIndex(int post) {
 		int[] ret = new int[2];
-		ret[0] = post / 12;
-		ret[1] = post % 12;
+		ret[0] = post / Config.matrixSize;
+		ret[1] = post % Config.matrixSize;
 		return ret;
 	}
 	
@@ -97,6 +109,7 @@ public class AStarApplication extends JFrame {
 	 * Create the frame.
 	 */
 	public AStarApplication() {
+		setTitle("A* Algorithm");
 		setResizable(false);
 		setBackground(new Color(183, 232, 255));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,9 +127,10 @@ public class AStarApplication extends JFrame {
 		contentPane.add(panel, BorderLayout.EAST);
 		panel.setLayout(new BorderLayout(0, 0));
 		
-		lblInfo = new JLabel("Info");
+		lblInfo = new JLabel("_____ INFO _____");
+		lblInfo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblInfo.setForeground(Color.WHITE);
-		lblInfo.setFont(new Font("SansSerif", Font.BOLD, 18));
+		lblInfo.setFont(new Font("SansSerif", Font.BOLD, 24));
 		panel.add(lblInfo, BorderLayout.NORTH);
 		
 		panel_3 = new JPanel();
@@ -129,7 +143,7 @@ public class AStarApplication extends JFrame {
 		panel_7.setOpaque(false);
 		panel_7.setPreferredSize(new Dimension(90, 10));
 		panel_3.add(panel_7, BorderLayout.EAST);
-		panel_7.setLayout(new GridLayout(8, 0, 0, 0));
+		panel_7.setLayout(new GridLayout(3, 0, 0, 0));
 		
 		lblVisitedCnt = new JLabel("0");
 		lblVisitedCnt.setHorizontalAlignment(SwingConstants.CENTER);
@@ -144,10 +158,11 @@ public class AStarApplication extends JFrame {
 		panel_7.add(lblLength);
 		
 		panel_8 = new JPanel();
+		panel_8.setBorder(new EmptyBorder(0, 10, 0, 0));
 		panel_8.setPreferredSize(new Dimension(80, 10));
 		panel_8.setOpaque(false);
 		panel_3.add(panel_8, BorderLayout.CENTER);
-		panel_8.setLayout(new GridLayout(8, 0, 0, 0));
+		panel_8.setLayout(new GridLayout(3, 0, 0, 0));
 		
 		lblNumberOfVisited = new JLabel("Number of visited node:");
 		lblNumberOfVisited.setForeground(Color.WHITE);
@@ -160,10 +175,51 @@ public class AStarApplication extends JFrame {
 		panel_8.add(lblPathLength);
 		
 		lblPathFound = new JLabel("FINDING");
-		lblPathFound.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPathFound.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPathFound.setForeground(Color.WHITE);
 		lblPathFound.setFont(new Font("SansSerif", Font.BOLD, 16));
 		panel_8.add(lblPathFound);
+		
+		panel_9 = new JPanel();
+		panel_9.setOpaque(false);
+		panel_9.setPreferredSize(new Dimension(10, 400));
+		panel.add(panel_9, BorderLayout.SOUTH);
+		panel_9.setLayout(null);
+		
+		lblSize = new JLabel("Size:");
+		lblSize.setForeground(Color.WHITE);
+		lblSize.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblSize.setBounds(47, 50, 51, 28);
+		panel_9.add(lblSize);
+		
+		spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(12, 12, 30, 1));
+		spinner.setFont(new Font("Arial", Font.BOLD, 22));
+		spinner.setBounds(108, 50, 83, 28);
+		panel_9.add(spinner);
+		
+		btnUpdateMatrix = new JButton("OK");
+		btnUpdateMatrix.setFocusPainted(false);
+		btnUpdateMatrix.setForeground(new Color(255, 255, 255));
+		btnUpdateMatrix.setBorder(null);
+		btnUpdateMatrix.setBackground(new Color(0, 64, 0));
+		btnUpdateMatrix.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnUpdateMatrix.setPreferredSize(new Dimension(20, 20));
+		btnUpdateMatrix.setBounds(201, 51, 69, 28);
+		panel_9.add(btnUpdateMatrix);
+		
+		lblCngC_1 = new JLabel("Initilize:");
+		lblCngC_1.setForeground(Color.WHITE);
+		lblCngC_1.setFont(new Font("SansSerif", Font.BOLD, 18));
+		lblCngC_1.setBounds(10, 10, 160, 30);
+		panel_9.add(lblCngC_1);
+		
+		lblSizeBetween = new JLabel("Size between 12 and 30");
+		lblSizeBetween.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSizeBetween.setForeground(Color.WHITE);
+		lblSizeBetween.setFont(new Font("SansSerif", Font.BOLD, 16));
+		lblSizeBetween.setBounds(47, 88, 223, 28);
+		panel_9.add(lblSizeBetween);
 		
 		panel_1 = new JPanel();
 		panel_1.setOpaque(false);
@@ -187,7 +243,7 @@ public class AStarApplication extends JFrame {
 		
 		btnStart = new JToggleButton("Start");
 		btnStart.setForeground(new Color(255, 255, 255));
-		btnStart.setBackground(new Color(0, 0, 0));
+		btnStart.setBackground(new Color(74, 74, 74));
 		btnStart.setFocusPainted(false);
 		btnStart.setFont(new Font("Roboto Mono", Font.BOLD, 12));
 		btnStart.setPreferredSize(new Dimension(80, 25));
@@ -195,7 +251,7 @@ public class AStarApplication extends JFrame {
 		
 		btnEnd = new JToggleButton("End");
 		btnEnd.setForeground(new Color(255, 255, 255));
-		btnEnd.setBackground(new Color(0, 0, 0));
+		btnEnd.setBackground(new Color(74, 74, 74));
 		btnEnd.setPreferredSize(new Dimension(80, 25));
 		btnEnd.setFont(new Font("Roboto Mono", Font.BOLD, 12));
 		btnEnd.setFocusPainted(false);
@@ -203,23 +259,23 @@ public class AStarApplication extends JFrame {
 		
 		btnWall = new JToggleButton("Wall");
 		btnWall.setForeground(new Color(255, 255, 255));
-		btnWall.setBackground(new Color(0, 0, 0));
+		btnWall.setBackground(new Color(74, 74, 74));
 		btnWall.setPreferredSize(new Dimension(80, 25));
 		btnWall.setFont(new Font("Roboto Mono", Font.BOLD, 12));
 		btnWall.setFocusPainted(false);
 		panel_4.add(btnWall);
 		
-		btnClear = new JToggleButton("Clear");
-		btnClear.setForeground(new Color(255, 255, 255));
-		btnClear.setBackground(new Color(0, 0, 0));
-		btnClear.setPreferredSize(new Dimension(80, 25));
-		btnClear.setFont(new Font("Roboto Mono", Font.BOLD, 12));
-		btnClear.setFocusPainted(false);
-		panel_4.add(btnClear);
+		btnDelete = new JToggleButton("Delete");
+		btnDelete.setForeground(new Color(255, 255, 255));
+		btnDelete.setBackground(new Color(74, 74, 74));
+		btnDelete.setPreferredSize(new Dimension(80, 25));
+		btnDelete.setFont(new Font("Roboto Mono", Font.BOLD, 12));
+		btnDelete.setFocusPainted(false);
+		panel_4.add(btnDelete);
 		
 		btnDefault = new JToggleButton("Def");
 		btnDefault.setForeground(new Color(255, 255, 255));
-		btnDefault.setBackground(new Color(0, 0, 0));
+		btnDefault.setBackground(new Color(74, 74, 74));
 		btnDefault.setPreferredSize(new Dimension(80, 25));
 		btnDefault.setFont(new Font("Roboto Mono", Font.BOLD, 12));
 		btnDefault.setFocusPainted(false);
@@ -227,7 +283,7 @@ public class AStarApplication extends JFrame {
 		
 		panel_5 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_5.getLayout();
-		flowLayout.setHgap(36);
+		flowLayout.setHgap(15);
 		panel_5.setPreferredSize(new Dimension(10, 35));
 		panel_5.setOpaque(false);
 		panel_1.add(panel_5, BorderLayout.SOUTH);
@@ -258,19 +314,27 @@ public class AStarApplication extends JFrame {
 		btnNext.setPreferredSize(new Dimension(70, 28));
 		panel_5.add(btnNext);
 		
-		btnClearall = new JButton("ClearAll");
+		btnClearall = new JButton("CLS ALL");
 		btnClearall.setForeground(new Color(255, 255, 255));
-		btnClearall.setBackground(new Color(77, 66, 51));
+		btnClearall.setBackground(new Color(128, 128, 255));
 		btnClearall.setPreferredSize(new Dimension(90, 25));
 		btnClearall.setFont(new Font("Roboto Mono", Font.BOLD, 12));
 		btnClearall.setFocusPainted(false);
 		panel_5.add(btnClearall);
+		
+		btnClearpath = new JButton("CLS PATH");
+		btnClearpath.setPreferredSize(new Dimension(90, 25));
+		btnClearpath.setForeground(Color.WHITE);
+		btnClearpath.setFont(new Font("Roboto Mono", Font.BOLD, 12));
+		btnClearpath.setFocusPainted(false);
+		btnClearpath.setBackground(new Color(128, 128, 255));
+		panel_5.add(btnClearpath);
 		panel_6 = new JPanel();
 		panel_6.setOpaque(false);
 		panel_6.setBackground(new Color(255, 255, 255));
 		panel_6.setBorder(new EmptyBorder(8, 8, 8, 8));
 		panel_1.add(panel_6, BorderLayout.CENTER);
-		panel_6.setLayout(new GridLayout(12, 12, 1, 1));
+		panel_6.setLayout(new GridLayout(Config.matrixSize, Config.matrixSize, 1, 1));
 		
 		loadMatrix();
 		changeBtn();
@@ -280,7 +344,7 @@ public class AStarApplication extends JFrame {
 		// TODO Auto-generated method stub
 		grp.add(btnStart);
 		grp.add(btnEnd);
-		grp.add(btnClear);
+		grp.add(btnDelete);
 		grp.add(btnDefault);
 		grp.add(btnWall);
 		grp.setSelected(btnDefault.getModel(), true);
@@ -292,7 +356,7 @@ public class AStarApplication extends JFrame {
 		btnEnd.addActionListener(e -> {
 			Config.selectmode = Config.END;
 		});
-		btnClear.addActionListener(e -> {
+		btnDelete.addActionListener(e -> {
 			Config.selectmode = Config.CLEAR;
 		});
 		btnDefault.addActionListener(e -> {
@@ -309,21 +373,23 @@ public class AStarApplication extends JFrame {
 				cell.clear();
 			});
 			AStar = new AStarAlgorithm();
-			btnAuto.setEnabled(false);
-			btnNext.setEnabled(false);
-			btnDone.setEnabled(true);
-			btnStart.setEnabled(true);
-			btnEnd.setEnabled(true);
-			btnWall.setEnabled(true);
-			btnClear.setEnabled(true);
-			grp.setSelected(btnDefault.getModel(), true);
-			lblVisitedCnt.setText("0");
-			lblLength.setText("0");
-			lblPathFound.setText("FINDING");
+			refershBtn();
+		});
+		
+		btnClearpath.addActionListener(e -> {
+			cells.forEach(cell -> {
+				if (!cell.isWall && cell != Config.startCell && cell != Config.endCell) {					
+					cell.clear();
+				}
+				AStar = new AStarAlgorithm();
+				refershBtn();
+			});
+			
+			AStar = new AStarAlgorithm();
 		});
 		btnDone.addActionListener(e -> {
 			if (Config.startCell == null || Config.endCell == null) {
-				JOptionPane.showMessageDialog(null, "MUST HAVE START POINT AND GOAL POINT", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "You must define START and END point!!!", "Error", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			AStar.setStart(Config.startCell.x, Config.startCell.y);
@@ -342,7 +408,7 @@ public class AStarApplication extends JFrame {
 			btnStart.setEnabled(false);
 			btnEnd.setEnabled(false);
 			btnWall.setEnabled(false);
-			btnClear.setEnabled(false);
+			btnDelete.setEnabled(false);
 		});
 		btnNext.addActionListener(e -> {
 			if (AStar.nextState()) {
@@ -365,6 +431,26 @@ public class AStarApplication extends JFrame {
 				
 			}).start();
 		});
+		btnUpdateMatrix.addActionListener(e -> {
+			reloadMatrix();
+			AStar = new AStarAlgorithm();
+			refershBtn();
+		});
+
+	}
+	
+	private void refershBtn() {
+		btnAuto.setEnabled(false);
+		btnNext.setEnabled(false);
+		btnDone.setEnabled(true);
+		btnStart.setEnabled(true);
+		btnEnd.setEnabled(true);
+		btnWall.setEnabled(true);
+		btnDelete.setEnabled(true);
+		grp.setSelected(btnDefault.getModel(), true);
+		lblVisitedCnt.setText("0");
+		lblLength.setText("0");
+		lblPathFound.setText("FINDING");
 	}
 	
 	private void drawPath() {
@@ -380,7 +466,7 @@ public class AStarApplication extends JFrame {
 
 	private void loadMatrix() {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < 12*12; i++) {
+		for (int i = 0; i < Config.matrixSize*Config.matrixSize; i++) {
 			int[] p = getCellIndex(i);
 			Cell cell = new Cell(p[0], p[1]);
 			panel_6.add(cell);
@@ -388,9 +474,21 @@ public class AStarApplication extends JFrame {
 		}
 	}
 	
+	private void reloadMatrix() {
+		Config.matrixSize = (int) spinner.getValue();
+		cells.clear();
+		panel_6.removeAll();
+		panel_6.setLayout(new GridLayout(Config.matrixSize, Config.matrixSize, 1, 1));
+		loadMatrix();
+		panel_6.revalidate();
+		panel_6.repaint();
+		Config.startCell = null;
+		Config.endCell = null;
+	}
+	
 	private void showAttempt() {
-		for (int i = 0; i < 12; i++) {
-			for (int j = 0; j < 12; j++) {
+		for (int i = 0; i < Config.matrixSize; i++) {
+			for (int j = 0; j < Config.matrixSize; j++) {
 				Point point = AStar.matrix[i][j];
 				if (point == AStar.start) {
 					getCell(i, j).makeStart();
@@ -410,4 +508,5 @@ public class AStarApplication extends JFrame {
 			}
 		}
 	}
+	
 }

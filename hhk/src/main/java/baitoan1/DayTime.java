@@ -58,6 +58,16 @@ public class DayTime {
 	    return Integer.compare(thisMinute, otherMinute);
 	}
 
+	public static DayTime parse(String timeStr) {
+        String[] parts = timeStr.split(":");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Định dạng thời gian không hợp lệ. Phải là giờ:phút.");
+        }
+        int hour = Integer.parseInt(parts[0]);
+        int minute = Integer.parseInt(parts[1]);
+        return new DayTime(hour, minute);
+    }
+
 	
 //	public static void main(String[] args) {
 //		System.out.println((new DayTime(4, 0)).sub(new DayTime(7, 45)));

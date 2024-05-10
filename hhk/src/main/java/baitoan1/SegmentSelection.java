@@ -67,10 +67,10 @@ class SegmentSelection  {
 
     public ArrayList<ArrayList<Segment>> selectSegments() {    	
         Arrays.sort(segments);        
-        int total=0;
         while (m!=0) {
         	ArrayList<Segment> selectedSegments= new ArrayList<>();
-        	
+        	for (Segment seg: segments)
+    			System.out.println("["+seg.start+","+seg.end+"]");
         	for (int i=0; i<segments.length; i++) {
         		System.out.println(segments.length);
         		System.out.println("["+segments[i].start+","+segments[i].end+"]");
@@ -81,21 +81,21 @@ class SegmentSelection  {
                         break;
                     }
                 }
-                if (intersects)
-                	break;
-                else if (segments[i]!=null && intersects==false ) {
+                
+                if (!intersects) {
+                	System.out.println("hello");
                 	selectedSegments.add(segments[i]);
-                	if (i<m-1)
-                		segments[i]=segments[i+1];
-                	else 
-                		segments[i]=null;
-                	Segment[] temp = new Segment[segments.length - 1];
-                    System.arraycopy(segments, 0, temp, 0, segments.length - 1);
-                    segments = temp;
-                	m--;   	
-                	
+                	for (int j=0; j<m-1; j++) {
+                		segments[j]=segments[j+1];
+                	}
+                	segments[m-1]=null;
+                	m--;
+                	Segment[] temp = Arrays.copyOf(segments, m);
+                    segments = temp;   
+                    i--;
                 }                     
             }
+        	
         	S.add(selectedSegments);
         	if (S.size()==n) {
         		break;

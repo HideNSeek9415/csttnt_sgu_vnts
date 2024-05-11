@@ -1,7 +1,6 @@
 package astar;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class AStarAlgorithm {
@@ -136,17 +135,6 @@ public class AStarAlgorithm {
 		}
 		return true;
 	}
-	
-//	public void refresh() {
-//		for (Point[] row : matrix) {
-//			for (Point point : row) {
-//				point.visited = false;
-//				point.fx = 0;
-//				point.gx = 0;
-//				point.parrent = null;
-//			}
-//		}
-//	}
 	
 	public void printMatrix() {
 		for (Point[] row : matrix) {

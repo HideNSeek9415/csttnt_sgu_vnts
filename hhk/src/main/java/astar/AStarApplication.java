@@ -8,9 +8,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -19,19 +16,12 @@ import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.border.SoftBevelBorder;
-import javax.swing.plaf.SpinnerUI;
-import javax.swing.plaf.metal.MetalLookAndFeel;
-import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.JToggleButton;
 
 public class AStarApplication extends JFrame {

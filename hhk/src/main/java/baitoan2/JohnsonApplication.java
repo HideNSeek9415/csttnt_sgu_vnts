@@ -71,6 +71,7 @@ public class JohnsonApplication extends JFrame {
 	 * Create the frame.
 	 */
 	public JohnsonApplication() {
+		setTitle("Gia công chi tiết - Johnson algorithm");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1182, 578);
 		contentPane = new JPanel();
@@ -248,6 +249,7 @@ public class JohnsonApplication extends JFrame {
 		});
 		btnRemove.addActionListener(e -> {
 			details.remove(table.getSelectedRow());
+			reloadTable();
 		});
 		btnRmall.addActionListener(e -> {
 			DefaultTableModel model = (DefaultTableModel) table.getModel();
